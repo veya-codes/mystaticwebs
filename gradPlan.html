@@ -704,14 +704,15 @@ function matchesFilters(x){
       && (!Q || text.includes(Q));
 }
 
+let lastResults = [];
 
 
 function renderResults(){
   if(!currentTrend) return;
   const items = catalog.filter(x=>x.trend===currentTrend.id && matchesFilters(x));
+  lastResults = items;
   results.innerHTML = items.map((x,i)=>{
     const loc = getLoc(x);
-    const safe = JSON.stringify(x).replace(/"/g,'&quot;');
     return `<div class="item">
       <div class="meta"><span class="badge">${x.tier||''}</span><span class="badge">${loc||''}</span><span class="badge">${x.mode||''}</span></div>
       <h3>${x.course||''}</h3>
@@ -719,7 +720,7 @@ function renderResults(){
       <div class="chips">${(x.exams||[]).map(t=>`<span class="chip">${t}</span>`).join('')}</div>
       <div class="toolbar">
         <a class="link" href="${x.link||'#'}" target="_blank" rel="noopener">Official page ↗</a>
-        <button onclick='openModal(JSON.parse("` + safe + `"))'>View details</button>
+        <button type="button" class="view-details" data-result-index="${i}">View details</button>
       </div>
     </div>`
   }).join('') || `<div class="small">No results match your filters. Try clearing a filter.</div>`;
@@ -745,6 +746,15 @@ function openModal(x){
 
 function closeModal(){ modal.classList.remove('show'); }
 modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+
+results.addEventListener('click', (event)=>{
+  const target = event.target;
+  const button = target instanceof Element ? target.closest('button.view-details') : null;
+  if(!button) return;
+  const index = Number(button.dataset.resultIndex);
+  const item = Number.isNaN(index) ? null : lastResults[index];
+  if(item) openModal(item);
+});
 
 renderTrends();
 </script>
