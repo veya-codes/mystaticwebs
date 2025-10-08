@@ -33,6 +33,7 @@
   .card h3{margin:0 0 8px;font-size:18px}
   .small{font-size:14px;color:var(--muted)}
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .fit{margin-top:8px;font-size:13px;color:#1d4ed8;font-weight:600}
   .chip{background:var(--chip);color:#1f3a8a;border:1px solid #cfe0ff;padding:4px 10px;border-radius:999px;font-size:12px}
   button{all:unset;display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer;box-shadow:0 1px 2px rgba(16,24,40,.1)}
   button:hover{filter:brightness(.95)}
@@ -155,42 +156,50 @@ const trends = [
   { id:"ai-ml", name:"Artificial Intelligence & Machine Learning",
     overview:"AI is like giving computers a brain to learn patterns and make decisions. Think chatbots that answer doubts, photo apps that spot friends, or systems that translate languages. It matters because AI speeds up work, reduces errors, and creates new jobs in every field—from health to films.",
     apps:["GenAI copilots","Personalized healthcare","Fintech risk","Autonomous systems","Smart cities"],
-    core:["Linear algebra","Probability","Optimization","Deep learning","MLOps"]
+    core:["Linear algebra","Probability","Optimization","Deep learning","MLOps"],
+    fit:"Best for curious coders who enjoy math puzzles, spotting patterns, and automating tedious tasks."
   },
   { id:"semicon", name:"Semiconductors, VLSI & Embedded",
     overview:"Chips are the ‘engines’ inside phones, EVs and satellites. VLSI engineers design those chips, while embedded engineers program tiny computers inside gadgets. As India builds fabs and OSAT/ATMP plants, this field is booming and global-scale.",
     apps:["SoC/ASIC design","5G/IoT","AR/VR devices","Automotive electronics","Medical devices"],
-    core:["Digital & Analog IC","Device physics","RTL & Verification","EDA/CAD flows","C/Embedded Firmware"]
+    core:["Digital & Analog IC","Device physics","RTL & Verification","EDA/CAD flows","C/Embedded Firmware"],
+    fit:"Great for detail-loving builders who like circuits, electronics tinkering, and patient problem solving."
   },
   { id:"robotics", name:"Robotics & Automation",
     overview:"Robots are machines that sense, plan and act—on roads (self-driving), in factories (welding/pick-and-place) or at home (vacuums). Robotics blends mechanics, electronics and AI. It makes jobs safer and frees people to do creative work.",
     apps:["Industrial robots","Drones & AGVs","Medical robotics","Warehouse automation","Humanoids"],
-    core:["Mechatronics","Control systems","Perception (vision/LiDAR)","Embedded & ROS","Path planning"]
+    core:["Mechatronics","Control systems","Perception (vision/LiDAR)","Embedded & ROS","Path planning"],
+    fit:"Perfect for hands-on tinkerers who love building gadgets, coding sensors, and seeing machines come alive."
   },
   { id:"clean", name:"Clean Energy, EVs & Grid Tech",
     overview:"Clean energy means powering the world with solar, wind, hydro and efficient batteries. Engineers here design EV drivetrains, batteries, and smart grids so power is reliable and green. It impacts bills, air quality and climate.",
     apps:["Energy systems","Batteries & BMS","Power electronics","Smart grids","Hydrogen & fuel cells"],
-    core:["Thermo & fluids","Machines & drives","Power converters","Energy systems modeling","Grid control"]
+    core:["Thermo & fluids","Machines & drives","Power converters","Energy systems modeling","Grid control"],
+    fit:"Ideal for sustainability-minded problem solvers who enjoy physics, large systems thinking, and energy innovation."
   },
   { id:"space", name:"Space/Aerospace & Avionics",
     overview:"Aerospace is flight—air and space. You’ll learn aerodynamics, structures, propulsion and guidance. India’s private space startups plus ISRO mean careers from small satellites to re-entry vehicles.",
     apps:["Satellites","Launch vehicles","UAVs","Navigation & GNSS","Hypersonics"],
-    core:["Aerodynamics","Propulsion","Structures","Flight mechanics & control","Avionics/Embedded"]
+    core:["Aerodynamics","Propulsion","Structures","Flight mechanics & control","Avionics/Embedded"],
+    fit:"Suited to dreamers of flight who are strong in physics, enjoy simulation/design, and stay calm under precision work."
   },
   { id:"cyber", name:"Cybersecurity",
     overview:"Cybersecurity protects phones, banks and power plants from hackers. You learn how attacks work and how to defend against them—encryption, secure coding and incident response. It’s practical, fast-growing and needed in every sector.",
     apps:["App & cloud security","Network defense","SOC/IR","OT/ICS security","Privacy & crypto"],
-    core:["Operating systems","Networks","Cryptography","Secure coding","Threat hunting"]
+    core:["Operating systems","Networks","Cryptography","Secure coding","Threat hunting"],
+    fit:"Great for investigative minds who enjoy puzzles, ethical hacking, and protecting systems under pressure."
   },
   { id:"quantum", name:"Quantum, Physics & Advanced Computing",
     overview:"Quantum tech uses weird but powerful physics to sense, compute and encrypt. Paired with strong math/physics, it opens paths in research labs and high-end R&D, and trains your brain for any hard tech problem.",
     apps:["Quantum computing","Quantum sensing","Photonics","Nanotech","Scientific computing"],
-    core:["Linear algebra","QM & EM","Solid-state & devices","Numerical methods","Data & HPC"]
+    core:["Linear algebra","QM & EM","Solid-state & devices","Numerical methods","Data & HPC"],
+    fit:"Tailor-made for theory lovers who enjoy abstract math, physics experiments, and pushing computing frontiers."
   },
   { id:"mathcomp", name:"Mathematics & Computing",
     overview:"Math & Computing mixes deep math with CS so you can build fast, reliable algorithms for AI, finance, crypto and science. You learn to model problems and code robust solutions.",
     apps:["Algorithms","Data science","Computational finance","Cryptography","Optimization"],
-    core:["DSA","Probability & stats","Numerics","Optimization","Systems & ML foundations"]
+    core:["DSA","Probability & stats","Numerics","Optimization","Systems & ML foundations"],
+    fit:"Perfect for analytical thinkers who love proofs, coding challenges, and translating real problems into equations."
   }
 ];
 
@@ -665,6 +674,7 @@ function renderTrends(){
       <div class="small">${t.overview}</div>
       <div class="chips">${t.apps.map(chip).join('')}</div>
       <div class="small">Core: ${t.core.join(' • ')}</div>
+      <div class="fit">${t.fit}</div>
       <div class="toolbar"><button onclick="openTrend('${t.id}')">🔘 Explore This Trend</button></div>
     </div>
   `).join('');
