@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shloka’s Futuristic Tech & Career Portal</title>
+<style>
+  :root{
+    --bg:#f7fafc;           /* lighter theme */
+    --card:#ffffff;
+    --text:#1a202c;
+    --muted:#4a5568;
+    --accent:#2563eb;       /* soft blue */
+    --accent-2:#10b981;     /* mint */
+    --chip:#e6f0ff;
+    --ring:rgba(37,99,235,0.25);
+  }
+  html,body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,'Noto Sans',sans-serif;margin:0}
+  .wrap{max-width:1200px;margin:0 auto;padding:24px}
+  header{
+    background:linear-gradient(180deg,#ffffff, #eef5ff);
+    border-bottom:1px solid #e5e7eb;
+  }
+  .title{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap
+  }
+  .title h1{font-size:clamp(20px,4vw,34px);margin:0}
+  .subtitle{color:var(--muted);margin-top:6px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+  .card{
+    background:var(--card);border:1px solid #e5e7eb;border-radius:16px;padding:16px;box-shadow:0 1px 2px rgba(16,24,40,.06)
+  }
+  .card h3{margin:0 0 8px;font-size:18px}
+  .small{font-size:14px;color:var(--muted)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .chip{background:var(--chip);color:#1f3a8a;border:1px solid #cfe0ff;padding:4px 10px;border-radius:999px;font-size:12px}
+  button{all:unset;display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer;box-shadow:0 1px 2px rgba(16,24,40,.1)}
+  button:hover{filter:brightness(.95)}
+  .btn-secondary{background:var(--accent-2)}
+  .section{margin:28px 0}
+  .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}
+  select, input[type="search"]{width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:12px;background:#fff;outline:none}
+  select:focus, input[type="search"]:focus{box-shadow:0 0 0 4px var(--ring);border-color:var(--accent)}
+  .list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .item{background:var(--card);border:1px solid #e5e7eb;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .item .meta{display:flex;flex-wrap:wrap;gap:8px}
+  .muted{color:var(--muted)}
+  .link{color:var(--accent);text-decoration:none;font-weight:600}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  /* Modal */
+  .modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal.show{display:flex}
+  .modal-card{background:#fff;max-width:980px;width:100%;max-height:88vh;overflow:auto;border-radius:16px;border:1px solid #e5e7eb;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+  .modal-head{padding:16px 20px;border-bottom:1px solid #eef2f7;display:flex;justify-content:space-between;align-items:center}
+  .modal-head h3{margin:0;font-size:20px}
+  .modal-body{padding:16px 20px}
+  .cols{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}
+  @media (max-width:860px){.cols{grid-template-columns:1fr}}
+  .section-title{font-weight:700;font-size:16px;margin:18px 0 8px}
+  ul{margin:0 0 8px 18px}
+  .badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:#f1f5f9;color:#0f172a;padding:6px 10px;font-size:12px;border:1px solid #e2e8f0}
+  .footer{margin-top:24px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="title">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l3 6 6 .9-4.5 4.3 1 6-5.5-3-5.5 3 1-6L3 8.9 9 8l3-6z" fill="#2563eb"/></svg>
+        <div>
+          <h1>Shloka’s Futuristic Tech & Career Portal</h1>
+          <div class="subtitle">For an MPC student in Hyderabad aiming at AI-heavy, Robotics, Semiconductor/Embedded, and Clean-Tech careers.</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- SECTION 1: Futuristic Tech Trends Overview -->
+    <section class="section">
+      <h2>🔮 Futuristic Tech Trends Overview</h2>
+      <div id="trendGrid" class="grid"></div>
+    </section>
+
+    <!-- SECTION 2: Courses & Institutions (revealed after selecting a trend) -->
+    <section id="explore" class="section" style="display:none">
+      <div class="toolbar">
+        <span class="badge" id="activeTrend">Selected Trend</span>
+        <button class="btn-secondary" onclick="resetExplore()">← Back to Trends</button>
+      </div>
+      <div class="filters">
+        <select id="filterLocation">
+          <option value="">📍 Location (State/City)</option>
+        </select>
+        <select id="filterExam">
+          <option value="">📝 Entrance Exam</option>
+        </select>
+        <select id="filterTier">
+          <option value="">🏛️ Tier</option>
+          <option>Tier 1</option>
+          <option>Tier 2</option>
+          <option>Tier 3</option>
+        </select>
+        <select id="filterMode">
+          <option value="">🎒 Mode</option>
+          <option>On-campus</option>
+          <option>Online</option>
+          <option>Dual Degree</option>
+          <option>Integrated</option>
+        </select>
+        <input id="searchBox" type="search" placeholder="Search course/institution…" />
+      </div>
+      <div id="results" class="list"></div>
+    </section>
+
+    <div class="footer">Tip: Use filters to focus on Telangana & Andhra Pradesh (TS/AP), or explore pan-India Tier‑1/2 options. Every program card links to the official page.</div>
+  </main>
+
+  <!-- MODAL -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="modalTitle">Program details</h3>
+        <button onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="cols">
+          <div>
+            <div class="section-title">Course structure & duration</div>
+            <div id="mStructure" class="small"></div>
+            <div class="section-title">Entrance exams accepted</div>
+            <div id="mExams" class="chips"></div>
+            <div class="section-title">Indicative fee range</div>
+            <div id="mFees" class="small"></div>
+            <div class="section-title">Future career opportunities</div>
+            <ul id="mCareers"></ul>
+            <div class="section-title">Higher study options</div>
+            <ul id="mHigher"></ul>
+          </div>
+          <div>
+            <div class="section-title">Notable recruiters / labs / centres</div>
+            <ul id="mRecruiters"></ul>
+            <div class="section-title">Official link</div>
+            <p><a id="mLink" class="link" href="#" target="_blank" rel="noopener">Visit program website ↗</a></p>
+            <div class="section-title">Meta</div>
+            <div id="mMeta" class="small"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+// --------- Trend data (overview + taxonomy) ---------
+const trends = [
+  { id:"ai-ml", name:"Artificial Intelligence & Machine Learning",
+    overview:"AI is like giving computers a brain to learn patterns and make decisions. Think chatbots that answer doubts, photo apps that spot friends, or systems that translate languages. It matters because AI speeds up work, reduces errors, and creates new jobs in every field—from health to films.",
+    apps:["GenAI copilots","Personalized healthcare","Fintech risk","Autonomous systems","Smart cities"],
+    core:["Linear algebra","Probability","Optimization","Deep learning","MLOps"]
+  },
+  { id:"semicon", name:"Semiconductors, VLSI & Embedded",
+    overview:"Chips are the ‘engines’ inside phones, EVs and satellites. VLSI engineers design those chips, while embedded engineers program tiny computers inside gadgets. As India builds fabs and OSAT/ATMP plants, this field is booming and global-scale.",
+    apps:["SoC/ASIC design","5G/IoT","AR/VR devices","Automotive electronics","Medical devices"],
+    core:["Digital & Analog IC","Device physics","RTL & Verification","EDA/CAD flows","C/Embedded Firmware"]
+  },
+  { id:"robotics", name:"Robotics & Automation",
+    overview:"Robots are machines that sense, plan and act—on roads (self-driving), in factories (welding/pick-and-place) or at home (vacuums). Robotics blends mechanics, electronics and AI. It makes jobs safer and frees people to do creative work.",
+    apps:["Industrial robots","Drones & AGVs","Medical robotics","Warehouse automation","Humanoids"],
+    core:["Mechatronics","Control systems","Perception (vision/LiDAR)","Embedded & ROS","Path planning"]
+  },
+  { id:"clean", name:"Clean Energy, EVs & Grid Tech",
+    overview:"Clean energy means powering the world with solar, wind, hydro and efficient batteries. Engineers here design EV drivetrains, batteries, and smart grids so power is reliable and green. It impacts bills, air quality and climate.",
+    apps:["Energy systems","Batteries & BMS","Power electronics","Smart grids","Hydrogen & fuel cells"],
+    core:["Thermo & fluids","Machines & drives","Power converters","Energy systems modeling","Grid control"]
+  },
+  { id:"space", name:"Space/Aerospace & Avionics",
+    overview:"Aerospace is flight—air and space. You’ll learn aerodynamics, structures, propulsion and guidance. India’s private space startups plus ISRO mean careers from small satellites to re-entry vehicles.",
+    apps:["Satellites","Launch vehicles","UAVs","Navigation & GNSS","Hypersonics"],
+    core:["Aerodynamics","Propulsion","Structures","Flight mechanics & control","Avionics/Embedded"]
+  },
+  { id:"cyber", name:"Cybersecurity",
+    overview:"Cybersecurity protects phones, banks and power plants from hackers. You learn how attacks work and how to defend against them—encryption, secure coding and incident response. It’s practical, fast-growing and needed in every sector.",
+    apps:["App & cloud security","Network defense","SOC/IR","OT/ICS security","Privacy & crypto"],
+    core:["Operating systems","Networks","Cryptography","Secure coding","Threat hunting"]
+  },
+  { id:"quantum", name:"Quantum, Physics & Advanced Computing",
+    overview:"Quantum tech uses weird but powerful physics to sense, compute and encrypt. Paired with strong math/physics, it opens paths in research labs and high-end R&D, and trains your brain for any hard tech problem.",
+    apps:["Quantum computing","Quantum sensing","Photonics","Nanotech","Scientific computing"],
+    core:["Linear algebra","QM & EM","Solid-state & devices","Numerical methods","Data & HPC"]
+  },
+  { id:"mathcomp", name:"Mathematics & Computing",
+    overview:"Math & Computing mixes deep math with CS so you can build fast, reliable algorithms for AI, finance, crypto and science. You learn to model problems and code robust solutions.",
+    apps:["Algorithms","Data science","Computational finance","Cryptography","Optimization"],
+    core:["DSA","Probability & stats","Numerics","Optimization","Systems & ML foundations"]
+  }
+];
+
+// --------- Course & Institution Catalog ---------
+// Notes: location format = "City, State"; exams = [..]; mode ∈ {On-campus, Online, Dual Degree, Integrated}
+// Tiers are indicative: Tier 1 (IISc/IIT/IIITH/IIST/IISER/ISI/BITS/Top NITs/IIITs), Tier 2 (strong NITs/IIITs/leading privates), Tier 3 (good state/private colleges, especially TS/AP safety nets).
+const catalog = [
+  {trend:"ai-ml", tier:"Tier 1", course:"B.Tech in Artificial Intelligence",
+    inst:"IIT Hyderabad (Dept. of AI)", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"], 
+    structure:["Math core (LA, Prob, Calc)", "ML/Deep Learning, NLP, CV", "Systems (DB/OS), MLOps", "Electives: GenAI, RL, Edge-AI", "Capstone + research"],
+    careers:["ML Engineer","Data Scientist","Computer Vision Engineer","MLOps/Platform Engineer","AI Research Engineer"],
+    industries:["HealthTech","Fintech","Autonomous Systems","E-commerce","Media/GenAI"],
+    employers:["Google","Amazon","Microsoft","NVIDIA","TCS","Infosys","Wipro"],
+    higher:["IITs (AI/ML)","IISc CDS","CMU","Stanford","ETH Zürich"],
+    link:"https://ai.iith.ac.in/ug-admissions/",
+    mNote:"Great for puzzle-solvers who enjoy math, coding and building smart apps people actually use."
+  },
+  {trend:"ai-ml", tier:"Tier 1", course:"B.Tech in Data Science & AI",
+    inst:"IIT Roorkee (Mehta Family School)", city:"Roorkee", state:"Uttarakhand",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Math & stats core","Data engineering","ML systems","Responsible AI","Industry/research projects"],
+    careers:["Data Scientist","Applied Scientist","Analytics Engineer","AI Product Engineer","Research Assistant"],
+    industries:["Banking/Insurance","Consumer Tech","GovTech/Smart Cities","Manufacturing","Consulting"],
+    employers:["NVIDIA","Flipkart","Adobe","Zomato","PhonePe","TCS"],
+    higher:["IITR/IITB/IISc","UT Austin","UC Berkeley","EPFL","TUM"],
+    link:"https://msdai.iitr.ac.in/",
+    mNote:"If you like finding patterns and backing decisions with data, this is your lane."
+  },
+  {trend:"ai-ml", tier:"Tier 1", course:"B.Tech in Data Science & AI",
+    inst:"IIT Guwahati (Mehta Family School)", city:"Guwahati", state:"Assam",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Math/Stats core","ML, DL, NLP","Data systems","AI safety/ethics","Capstone"],
+    careers:["ML Engineer","NLP Engineer","Data Engineer","AI Analyst"],
+    industries:["Agritech","Telecom","Public sector","Startups","EdTech"],
+    employers:["Google","Qualcomm India","Accenture","TCS","LTIMindtree"],
+    higher:["IITG","IISc","Georgia Tech","UCL","University of Toronto"],
+    link:"https://www.iitg.ac.in/mehta/",
+    mNote:"Like solving real problems with numbers + code? You’ll feel at home here."
+  },
+  {trend:"ai-ml", tier:"Tier 1", course:"B.Tech in AI & Data Science",
+    inst:"IIT Jodhpur (SAIDE)", city:"Jodhpur", state:"Rajasthan",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Foundations (Math/Stats)","AI systems","Data platforms","Domain AI (health/industry)","Internship + thesis"],
+    careers:["AI Engineer","Data Scientist","AI Consultant","Platform Engineer"],
+    industries:["Smart Manufacturing","Energy","Mobility","GovTech"],
+    employers:["Siemens","Bosch India","Tata Elxsi","Infosys"],
+    higher:["IITJ","IISc","Imperial","Waterloo","NUS"],
+    link:"https://iitj.ac.in/saide/ug-program/",
+    mNote:"For builders who enjoy mixing math thinking with practical product work."
+  },
+  {trend:"ai-ml", tier:"Tier 1", course:"B.Tech + MS by Research (CSD/ECD tracks via UGEE)",
+    inst:"IIIT Hyderabad", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus (research-heavy, 5 yrs)", duration:"5 years", fees:"IIITH norms",
+    exams:["UGEE"],
+    structure:["Strong math & core CS/ECE","Research methods","Thesis with lab","Top-tier electives (NLP, CV, Speech)"],
+    careers:["Research Engineer","ML Engineer","Data Scientist","Applied Scientist"],
+    industries:["AI Labs","Deep-Tech startups","Fintech","HealthTech"],
+    employers:["NVIDIA","Adobe","Amazon","TCS Research","Microsoft"],
+    higher:["IISc/IIIT-H","CMU","MIT","Stanford"],
+    link:"https://ugadmissions.iiit.ac.in/ugee2025/",
+    mNote:"Ideal if you love research, hackathons and writing code that pushes what’s possible."
+  },
+  {trend:"ai-ml", tier:"Tier 2", course:"B.Tech CSE (AI & ML)",
+    inst:"JNTUH College of Engineering Hyderabad (Autonomous)", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"State norms",
+    exams:["TS EAPCET"],
+    structure:["CS core","AI/ML core incl. DL","DBMS/OS/Networks","Electives & Mini-projects","Industry internship"],
+    careers:["ML Engineer","Data Analyst","Software Engineer (AI)","Data Engineer"],
+    industries:["IT Services","Product Tech","Startups"],
+    employers:["TCS","Infosys","Tech Mahindra","NVIDIA (intern)"],
+    higher:["IITs/IIITH/IISc","US/EU MS"],
+    link:"https://jntuhceh.ac.in/courses_offered/5/dept",
+    mNote:"Solid public institute + Hyderabad ecosystem—great for internships."
+  },
+  {trend:"ai-ml", tier:"Tier 2", course:"B.Tech CSE (AI & ML)",
+    inst:"JNTU Kakinada – UCEK", city:"Kakinada", state:"Andhra Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"State norms",
+    exams:["AP EAPCET"],
+    structure:["Programming & DSA","AI/ML foundations","Databases & Cloud","Electives: NLP/CV","Capstone"],
+    careers:["Software/AI Engineer","Data Scientist (entry)","Analytics Engineer"],
+    industries:["Product Tech","BFSI","GovTech"],
+    employers:["TCS","Accenture","Infosys"],
+    higher:["IITs/IISc","US/EU MS"],
+    link:"https://www.jntuk.edu.in/course/7",
+    mNote:"Affordable route with recognized state university branding."
+  },
+  {trend:"ai-ml", tier:"Tier 2", course:"B.Tech CSE (AI & ML / AI & DS)",
+    inst:"JNTU Anantapur (R23 regulations, constituent colleges)", city:"Anantapur", state:"Andhra Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"State norms",
+    exams:["AP EAPCET"],
+    structure:["Core CS","AI/ML tracks","Data/IoT/Cyber options","Labs & projects"],
+    careers:["Software/ML Engineer","Data/BI Analyst"],
+    industries:["IT Services","Startups","GovTech"],
+    employers:["TCS","Infosys","Wipro"],
+    higher:["IITs/IIIT-H","Europe MS"],
+    link:"https://dap.jntua.ac.in/r23/",
+    mNote:"Flexible specializations under R23—choose your lane in 2nd/3rd year."
+  },
+  {trend:"ai-ml", tier:"Tier 2", course:"B.Tech CSE (AI & ML)",
+    inst:"GITAM School of Technology, Hyderabad", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"University norms",
+    exams:["GITAM GAT","TS EAPCET","AP EAPCET","JEE Main"],
+    structure:["CS foundations","AI/ML (DL/NLP/CV)","Data & Cloud","Projects & internships"],
+    careers:["ML Engineer","Data Engineer","Software Engineer (AI)"],
+    industries:["IT/Product","Smart Manufacturing","Retail/Fintech"],
+    employers:["Amazon","TCS","Accenture","Startups"],
+    higher:["IITs/IIITH","US/EU MS"],
+    link:"https://www.gitam.edu/hyderabad/artificial-intelligence-and-data-science/course/btech-computer-science-and-engineering-ai-ml",
+    mNote:"Active labs and clubs; good project exposure in Hyderabad."
+  },
+  {trend:"ai-ml", tier:"Tier 2", course:"B.Tech (AI & Data Science)",
+    inst:"VNR Vignana Jyothi Institute of Engineering & Technology (Autonomous)", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"Institute norms",
+    exams:["TS EAPCET"],
+    structure:["Math/Stats","ML/DL","Data engineering","MLOps","Project"],
+    careers:["Data Scientist","ML Engineer","Analytics Engineer"],
+    industries:["IT Services","Product Tech","Consulting"],
+    employers:["Deloitte","TCS","Tech firms"],
+    higher:["IITs/IIITH/IISc","US/EU MS"],
+    link:"https://vnrvjiet.ac.in/programmes-offered/",
+    mNote:"Popular Hyderabad autonomous college with strong placements."
+  },
+
+  {trend:"semicon", tier:"Tier 1", course:"B.Tech in Integrated Circuit Design & Technology (ICDT)",
+    inst:"IIT Gandhinagar", city:"Gandhinagar", state:"Gujarat",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Device physics","Analog/Digital IC","VLSI tech & fabrication","EDA flows","Semiconductor manufacturing"],
+    careers:["Analog/Digital Design Engineer","PD/STA Engineer","DFT/Verification Engineer","Process/Device Engineer"],
+    industries:["Chip Design","Foundry/ATMP","Automotive Electronics","IoT"],
+    employers:["Tata Electronics","Micron India","Qualcomm India","Texas Instruments India","Synopsys","Cadence"],
+    higher:["IISc (ECE/DESE)","IITB EE/VLSI","TU Delft","ETH Zürich"],
+    link:"https://iitgn.ac.in/academics/btech-curriculum",
+    mNote:"Perfect for tinkerers who love circuits + want to build India’s chip future."
+  },
+  {trend:"semicon", tier:"Tier 1", course:"BS in Electronic Systems (flexible online with in-person exams)",
+    inst:"IIT Madras (BS Electronic Systems)", city:"Chennai (nationwide online)", state:"Tamil Nadu",
+    mode:"Online coursework + in-person assessments", duration:"Up to 4 years (flexible pace)", fees:"Pay-per-term",
+    exams:["Qualifer + term exams"],
+    structure:["Circuits & signals","Embedded systems","VLSI basics","Control/Communication","System design projects"],
+    careers:["Embedded Engineer","Hardware/FPGA Engineer","Test Engineer","EDA Application Engineer"],
+    industries:["Consumer devices","EV/Auto","Aerospace","Industrial IoT"],
+    employers:["Tata Elxsi","Bosch","Siemens","Tejas Networks"],
+    higher:["IITM/IITB MS","US/Europe MS (ECE)"],
+    link:"https://study.iitm.ac.in/es",
+    mNote:"Good if you need flexibility but still want a rigorous electronics degree from a top IIT."
+  },
+  {trend:"semicon", tier:"Tier 1", course:"B.Tech ECE (VLSI/Embedded pathways)",
+    inst:"NIT Trichy (ECE)", city:"Tiruchirappalli", state:"Tamil Nadu",
+    mode:"On-campus", duration:"4 years", fees:"NIT norms",
+    exams:["JEE Main"],
+    structure:["Signals & systems","Digital/Analog VLSI","Microprocessors & Embedded","Communication systems","Design labs"],
+    careers:["RTL/Verification","Physical Design","Embedded Engineer","System Validation"],
+    industries:["Semiconductor design","Telecom","Automotive"],
+    employers:["Qualcomm","Samsung","NVIDIA","L&T","TCS"],
+    higher:["Top NITs/IITs","Europe VLSI MS"],
+    link:"https://www.nitt.edu/academics/departments/ece/programmes/btech/curriculum/UG%20ECE%20SYLLABUS%202022-26%20batch.pdf",
+    mNote:"Strong core ECE → easy to branch into chips, comms or embedded."
+  },
+  {trend:"semicon", tier:"Tier 2", course:"B.Tech Electronics Engineering (VLSI Design and Technology)",
+    inst:"GITAM School of Technology, Hyderabad", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"University norms",
+    exams:["GITAM GAT","TS EAPCET","AP EAPCET","JEE Main"],
+    structure:["Device & circuits","Digital/Analog VLSI","EDA tools","Verification","Mini projects"],
+    careers:["RTL/Verification","PD/STA","DFT","EDA App Engineer"],
+    industries:["Chip design","Embedded products"],
+    employers:["Qualcomm India","Synopsys","Cadence","Tata Electronics"],
+    higher:["IITs/IISc","EU/US VLSI MS"],
+    link:"https://www.gitam.edu/hyderabad/electrical-electronics-communication-engineering",
+    mNote:"Hyderabad’s chip design ecosystem gives you internship edges."
+  },
+  {trend:"semicon", tier:"Tier 2", course:"B.Tech ECE (VLSI / Embedded)",
+    inst:"JNTU Kakinada – UCEK", city:"Kakinada", state:"Andhra Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"State norms",
+    exams:["AP EAPCET"],
+    structure:["ECE core","VLSI/Embedded specializations","Communication & DSP","EDA labs","Project"],
+    careers:["Design/Verification","Embedded & Firmware","Testing"],
+    industries:["Semiconductor","Telecom","Industrial IoT"],
+    employers:["L&T","Tejas Networks","TCS"],
+    higher:["NIT/IIT VLSI","Europe ECE MS"],
+    link:"https://www.jntucek.ac.in/",
+    mNote:"Public campus with ECE strengths; good for VLSI/Embedded."
+  },
+  {trend:"semicon", tier:"Tier 2", course:"B.Tech ECE / EEE with Microelectronics & VLSI options",
+    inst:"KL (KLEF) – Vaddeswaram", city:"Guntur (Vaddeswaram)", state:"Andhra Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"University norms",
+    exams:["KLEEE"],
+    structure:["Electronics/EE core","Microelectronics/VLSI electives","Embedded systems","Industry projects"],
+    careers:["Embedded Engineer","VLSI Design/Test","Board/Systems"],
+    industries:["Semiconductor","Embedded Devices","Automotive"],
+    employers:["Bosch","TCS","Startups"],
+    higher:["IITs/IISc","EU/US MS"],
+    link:"https://www.kluniversity.in/rspls.aspx",
+    mNote:"Lots of microelectronics/power electives including IoT/Embedded."
+  },
+
+  {trend:"robotics", tier:"Tier 1", course:"B.Tech Computational Engineering & Mechanics (robotics/control heavy)",
+    inst:"IIT Madras (APM school)", city:"Chennai", state:"Tamil Nadu",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Mechanics & computation","Mechatronics","Controls","Perception","Optimization & simulation","Projects"],
+    careers:["Robotics Engineer","Controls Engineer","Autonomy Engineer","Mechatronics Engineer"],
+    industries:["Smart Manufacturing","Autonomous Systems","Aerospace","Mobility"],
+    employers:["Siemens","Tata Elxsi","Mahindra","L&T","ABB"],
+    higher:["IITM","ETH","CMU-RI","Georgia Tech"],
+    link:"https://apm.iitm.ac.in/new_programs.html",
+    mNote:"Love math + making machines move? This blends both beautifully."
+  },
+  {trend:"robotics", tier:"Tier 2", course:"B.Tech Robotics & Artificial Intelligence",
+    inst:"GITAM School of Technology, Hyderabad", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"University norms",
+    exams:["GITAM GAT","TS EAPCET","AP EAPCET","JEE Main"],
+    structure:["Robot design & mechatronics","Sensing & control","ROS & programming","ML/DL for robotics","Capstone"],
+    careers:["Robotics/Automation Engineer","Controls Engineer","Autonomy Engineer"],
+    industries:["Smart Manufacturing","Warehousing","Mobility"],
+    employers:["ABB","Tata","Hyundai","Startups"],
+    higher:["IITs/IIITH","CMU-RI/ETH"],
+    link:"https://www.gitam.edu/hyderabad/mechanical-engineering/course/btech-robotics-artificial-intelligence",
+    mNote:"Hands-on path if you love hardware + code + autonomy."
+  },
+  {trend:"robotics", tier:"Tier 2", course:"B.Tech Mechanical (Robotics/Autotronics pathways)",
+    inst:"KL (KLEF) – Vaddeswaram", city:"Guntur (Vaddeswaram)", state:"Andhra Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"University norms",
+    exams:["KLEEE"],
+    structure:["Mechanical core","Mechatronics/Robotics electives","Industrial Automation","Control & vision","Projects"],
+    careers:["Robotics/Automation Engineer","Mechatronics Engineer","Manufacturing Engineer"],
+    industries:["Smart Manufacturing","Electronics","Automotive"],
+    employers:["ABB","Bosch","Tata"],
+    higher:["IITs","EU/US MS (Robotics)"],
+    link:"https://www.kluniversity.in/admissions/engineering-college/",
+    mNote:"Customizable mechanical route with robotics-flavored options."
+  },
+  {trend:"robotics", tier:"Tier 2", course:"B.Tech Mechanical (Robotics)",
+    inst:"VIT-AP", city:"Amaravati", state:"Andhra Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"Univ. norms",
+    exams:["VITEEE"],
+    structure:["Mechanical core","Robotics track","Kinematics & control","Vision/AI basics","Capstone"],
+    careers:["Robotics Engineer","Automation Engineer","Manufacturing Engineer"],
+    industries:["Smart Manufacturing","Warehousing","Medical devices"],
+    employers:["Tata","L&T","Siemens","Startups"],
+    higher:["IITs","TU Delft/EPFL"],
+    link:"https://vit.ac.in/admissions/programmes-offered",
+    mNote:"If you like hardware + coding, this is a balanced path."
+  },
+
+  {trend:"clean", tier:"Tier 1", course:"B.Tech in Energy Science & Engineering",
+    inst:"IIT Bombay (DESE)", city:"Mumbai", state:"Maharashtra",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Thermo/Fluids","Energy systems","Power electronics","Renewables","Storage & grid","Capstone"],
+    careers:["EV/Powertrain Engineer","Energy Systems Engineer","Renewables Engineer","Grid Engineer"],
+    industries:["EV & Batteries","Renewables","Utilities","Consulting"],
+    employers:["Tata Power","ReNew","Siemens","GE Vernova"],
+    higher:["IITB/IISc","TU Munich","Stanford (E-AA)"],
+    link:"https://www.ese.iitb.ac.in/academics/btech-programme",
+    mNote:"For climate-minded builders who want to keep the lights on—cleanly."
+  },
+  {trend:"clean", tier:"Tier 1", course:"B.Tech in Energy Engineering",
+    inst:"IIT Delhi (DESE)", city:"New Delhi", state:"Delhi",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Energy fundamentals","Power & machines","Power converters","Renewables & grid","Projects"],
+    careers:["Energy Engineer","Power Electronics Engineer","Grid Analytics Engineer"],
+    industries:["Utilities","EV/Auto","Smart grid"],
+    employers:["NTPC","Tata Power","Siemens","Hitachi Energy"],
+    higher:["IITD/IISc","ETH/DTU"],
+    link:"https://dese.iitd.ac.in/btech",
+    mNote:"Enjoy circuits + big-picture systems? This blends both."
+  },
+  {trend:"clean", tier:"Tier 2", course:"B.Tech EEE (Energy, EV & Smart Grid electives)",
+    inst:"KL (KLEF) – Department of EEE", city:"Guntur (Vaddeswaram)", state:"Andhra Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"University norms",
+    exams:["KLEEE"],
+    structure:["Electrical core","Power systems","Smart grids","EV systems & BMS","Power electronics"],
+    careers:["Power Systems Engineer","EV/Drives Engineer","Protection & SCADA"],
+    industries:["Utilities","EV & Charging","Industrial power"],
+    employers:["ABB","Siemens","Tata Power","KEC"],
+    higher:["IITs/IISc","Europe Power MS"],
+    link:"https://www.kluniversity.in/eee/",
+    mNote:"Good lab ecosystem; lots of power/EV-flavored electives."
+  },
+  {trend:"clean", tier:"Tier 2", course:"B.Tech Electrical & Computer Engineering (energy/EV modules)",
+    inst:"GITAM School of Technology, Hyderabad", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"University norms",
+    exams:["GITAM GAT","TS EAPCET","AP EAPCET","JEE Main"],
+    structure:["Machines & drives","Power systems","Power electronics","EV technology","Industrial automation"],
+    careers:["Energy/EV Engineer","Power Electronics Engineer","Automation Engineer"],
+    industries:["EV & Batteries","Utilities","Manufacturing"],
+    employers:["Siemens","GE Vernova","Tata"],
+    higher:["IITs/IISc","US/EU MS"],
+    link:"https://www.gitam.edu/hyderabad/electrical-electronics-communication-engineering/course/btech-electrical-and-computer-engineering",
+    mNote:"Includes EV & automation exposure; good bridge to clean-tech roles."
+  },
+  {trend:"clean", tier:"Tier 2", course:"B.Tech EEE (Power Systems focus)",
+    inst:"JNTU Kakinada – constituent colleges (R20/R23 syllabi)", city:"Kakinada", state:"Andhra Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"State norms",
+    exams:["AP EAPCET"],
+    structure:["Electrical core","Power systems I/II","Power electronics","Machines","Protection & simulation labs"],
+    careers:["Power Systems","Grid Planning","Protection Engineer"],
+    industries:["Utilities","Industrial power","Renewables"],
+    employers:["State DISCOMs","L&T","ABB"],
+    higher:["IITs/NITs","EU Power MS"],
+    link:"https://jntukucen.ac.in/wp-content/uploads/2023/11/R20-Electrical-and-Electronics-Engineering-Syllabus.pdf",
+    mNote:"Classic power pathway; aligns with grid/renewables jobs in India."
+  },
+
+  {trend:"space", tier:"Tier 1", course:"B.Tech Aerospace Engineering",
+    inst:"IIT Bombay (Aerospace Dept.)", city:"Mumbai", state:"Maharashtra",
+    mode:"On-campus", duration:"4 years (5-yr DD also)", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Aero structures","Aerodynamics","Propulsion","Flight mechanics & control","Design projects"],
+    careers:["Aerospace Engineer","Flight Dynamics/Controls","Avionics/Embedded"],
+    industries:["ISRO ecosystem","Aero OEMs","Defense R&D","Drones"],
+    employers:["ISRO","HAL","DRDO","Tata Advanced Systems"],
+    higher:["IITB/IISc","Georgia Tech","TU Delft"],
+    link:"https://www.aero.iitb.ac.in/home/undergraduate-program",
+    mNote:"Love aircraft/rockets? This is the classic route."
+  },
+  {trend:"space", tier:"Tier 2", course:"B.Tech Aeronautical Engineering",
+    inst:"Institute of Aeronautical Engineering (IARE)", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"Institute norms",
+    exams:["TS EAPCET"],
+    structure:["Aerodynamics","Structures & materials","Propulsion","Controls & avionics basics","Aircraft design project"],
+    careers:["Aeronautical Engineer","Structures/Testing","Avionics (entry)"],
+    industries:["Aero/Defense","MRO","Drones"],
+    employers:["HAL","DRDO","TASL","Private MROs"],
+    higher:["IISc/IITs","EU/US Aero MS"],
+    link:"https://www.iare.ac.in/?q=pages%2Faeronautical-engineering",
+    mNote:"Accredited aero program in Hyderabad; strong lab culture."
+  },
+  {trend:"space", tier:"Tier 2", course:"B.Tech Aeronautical Engineering",
+    inst:"MLR Institute of Technology (MLRIT)", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"Institute norms",
+    exams:["TS EAPCET"],
+    structure:["Aerodynamics & structures","Propulsion","Aircraft systems","CAD/CAM for aero","Project"],
+    careers:["Aeronautical Engineer","Manufacturing/QA","Testing"],
+    industries:["Aero/Defense","UAVs","Manufacturing"],
+    employers:["TASL","Airbus India (supply chain)","MROs"],
+    higher:["IITs/IISc","US/EU Aero"],
+    link:"https://mlrit.ac.in/aeronautical-engineering/",
+    mNote:"Hands-on approach with workshops and aero labs."
+  },
+
+  {trend:"cyber", tier:"Tier 2", course:"B.Tech CSE (Cyber Security)",
+    inst:"JNTUH College of Engineering Hyderabad (Autonomous)", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"State norms",
+    exams:["TS EAPCET"],
+    structure:["CS core","Crypto & Networks","System security","DFIR & VAPT","Security labs"],
+    careers:["Security Engineer","AppSec","SOC/IR Analyst","Red/Blue Team"],
+    industries:["BFSI","Product Tech","GovTech/PSUs","Consulting"],
+    employers:["CERT-In","TCS","Deloitte"],
+    higher:["IITD/IISc","KU Leuven","ETH"],
+    link:"https://jntuh.ac.in/content/ug-programs/99/42c96486a633f20842b3b37289e8214a",
+    mNote:"Hyderabad cyber scene + strong CS base = great starter path."
+  },
+  {trend:"cyber", tier:"Tier 2", course:"B.Tech CSE (Cyber Security)",
+    inst:"GITAM School of Technology, Hyderabad", city:"Hyderabad", state:"Telangana",
+    mode:"On-campus", duration:"4 years", fees:"University norms",
+    exams:["GITAM GAT","TS EAPCET","AP EAPCET","JEE Main"],
+    structure:["Networks & OS","Crypto/PKI","Cloud sec","DFIR","Capstone"],
+    careers:["Security Engineer","Cloud Security","Threat Intel","DFIR"],
+    industries:["BFSI","Cloud/SaaS","Gov/Defense"],
+    employers:["Wipro","Infosys","Zoho","PwC"],
+    higher:["IITs/IIITs","US/EU Cyber MS"],
+    link:"https://www.gitam.edu/hyderabad/artificial-intelligence-and-data-science/course/btech-computer-science-and-engineering-cyber-security",
+    mNote:"Project-led learning; good exposure to modern stacks."
+  },
+  {trend:"cyber", tier:"Tier 2", course:"B.Tech CSE (with Cyber Security specialization options)",
+    inst:"KL (KLEF) – Vaddeswaram", city:"Guntur (Vaddeswaram)", state:"Andhra Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"University norms",
+    exams:["KLEEE"],
+    structure:["CS core","Security electives (DF/CloudSec)","Projects & internships"],
+    careers:["AppSec","SOC Analyst","Security Engineer"],
+    industries:["IT Services","Product Tech","Consulting"],
+    employers:["TCS","Deloitte","Startups"],
+    higher:["IITs","EU Cyber MS"],
+    link:"https://www.kluniversity.in/admissions-2025/",
+    mNote:"Choose security-focused electives and build a solid portfolio."
+  },
+
+  {trend:"quantum", tier:"Tier 1", course:"B.Tech in Mathematics & Computing",
+    inst:"IISc Bengaluru", city:"Bengaluru", state:"Karnataka",
+    mode:"On-campus", duration:"4 years", fees:"IISc norms",
+    exams:["JEE Advanced"],
+    structure:["Math depth","Algorithms & CS theory","Scientific computing","Electives in Quantum/ML"],
+    careers:["Quant/FinTech","Research Engineer","HPC/Scientific Computing"],
+    industries:["Finance","Research Labs","Deep-Tech"],
+    employers:["Goldman Sachs India","TCS Research","IISc labs","IBM Research India"],
+    higher:["IISc","ETH","Cambridge","MIT"],
+    link:"https://iisc.ac.in/academics/ug/ug-programme/",
+    mNote:"If you love math and tough problems—this keeps doors open wide."
+  },
+  {trend:"quantum", tier:"Tier 1", course:"BS-MS (Physics major options)",
+    inst:"IISER system (via IAT)", city:"Across India", state:"—",
+    mode:"On-campus", duration:"5 years", fees:"IISER norms",
+    exams:["IAT"],
+    structure:["Foundations across sciences","Physics major","Research project (2 sems)","Quantum/Condensed Matter electives"],
+    careers:["Research/PhD","Quantum/Photonics R&D","Data/Scientific computing"],
+    industries:["Research labs","Quantum startups","Semiconductor R&D"],
+    employers:["IISER/IIT/IISc labs","QpiAI","QuLabs","TCS Research"],
+    higher:["IISER PhD","IISc/IITs","Max Planck","EPFL"],
+    link:"https://www.iiseradmission.in/",
+    mNote:"Curious and research-minded? This is a gold-standard science route."
+  },
+  {trend:"quantum", tier:"Tier 1", course:"B.Tech Engineering Physics (quantum-friendly pathway)",
+    inst:"IIT Bombay / IIT Delhi (EP)", city:"Mumbai/New Delhi", state:"MH/Delhi",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Physics core (QM/EM)","Devices/Photonics","CS/Math electives","Quantum/ML options","Project"],
+    careers:["Quantum/Photonics Engineer","R&D Engineer","Data/Algo roles"],
+    industries:["Semiconductor","Quantum tech","Analytics"],
+    employers:["ISRO","DRDO","Startups","FinTech"],
+    higher:["IITs/IISc","Waterloo IQC","Caltech"],
+    link:"https://www.iitb.ac.in/academics/academic-divisions/engineering-physics",
+    mNote:"Strong physics + computing—to pivot into quantum or deep tech."
+  },
+
+  {trend:"mathcomp", tier:"Tier 1", course:"B.Tech in Mathematics & Computing",
+    inst:"IIT Delhi", city:"New Delhi", state:"Delhi",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Algorithms/DSA","Probability & stats","Optimization","Systems & ML foundations","Electives"],
+    careers:["Software/Algo Engineer","Quant/Analyst","Data Scientist"],
+    industries:["Finance","Big Tech","Analytics"],
+    employers:["Google","NVIDIA","Goldman Sachs","Tower Research"],
+    higher:["IITD/IISc","CMU","EPFL"],
+    link:"https://math.iitd.ac.in/programmes/btech-mathematics-and-computing/",
+    mNote:"For math lovers who also enjoy building fast, clean code."
+  },
+  {trend:"mathcomp", tier:"Tier 1", course:"B.Tech Mathematics & Computing",
+    inst:"IIT Indore", city:"Indore", state:"Madhya Pradesh",
+    mode:"On-campus", duration:"4 years", fees:"IIT norms",
+    exams:["JEE Advanced"],
+    structure:["Math core","Computing core","Numerical/Scientific computing","Projects"],
+    careers:["Software/Algo","Data/Analytics","Research"],
+    industries:["Tech","Finance","Research"],
+    employers:["JPMC India","Adobe","Product startups"],
+    higher:["IITs/IISc","US/EU MS"],
+    link:"https://www.iiti.ac.in/newprog/",
+    mNote:"New-age M&C with good flexibility to aim at AI or finance later."
+  }
+];
+
+// --------- UI rendering ---------
+const trendGrid = document.getElementById('trendGrid');
+const explore = document.getElementById('explore');
+const activeTrend = document.getElementById('activeTrend');
+const results = document.getElementById('results');
+const modal = document.getElementById('modal');
+const filterLocation = document.getElementById('filterLocation');
+const filterExam = document.getElementById('filterExam');
+const filterTier = document.getElementById('filterTier');
+const filterMode = document.getElementById('filterMode');
+const searchBox = document.getElementById('searchBox');
+let currentTrend = null;
+function getLoc(x){ return x.location || [x.city, x.state].filter(Boolean).join(', '); }
+function getStructureText(x){ return Array.isArray(x.structure) ? x.structure.join(' • ') : (x.structure || 'See curriculum on official page.'); }
+function getRecruiters(x){ return x.recruiters || x.employers || []; }
+
+
+function chip(text){return `<span class="chip">${text}</span>`}
+
+function renderTrends(){
+  trendGrid.innerHTML = trends.map(t=>`
+    <div class="card">
+      <h3>${t.name}</h3>
+      <div class="small">${t.overview}</div>
+      <div class="chips">${t.apps.map(chip).join('')}</div>
+      <div class="small">Core: ${t.core.join(' • ')}</div>
+      <div class="toolbar"><button onclick="openTrend('${t.id}')">🔘 Explore This Trend</button></div>
+    </div>
+  `).join('');
+}
+
+function unique(list){return [...new Set(list)].sort((a,b)=>a.localeCompare(b))}
+
+
+function openTrend(id){
+  currentTrend = trends.find(t=>t.id===id);
+  activeTrend.textContent = `${currentTrend.name}`;
+  explore.style.display = 'block';
+  window.scrollTo({top:document.querySelector('#explore').offsetTop-10,behavior:'smooth'});
+  const items = catalog.filter(x=>x.trend===id);
+  const locs = [...new Set(items.map(x=>getLoc(x)))].sort((a,b)=>a.localeCompare(b));
+  filterLocation.innerHTML = `<option value="">📍 Location (State/City)</option>` + locs.map(v=>`<option>${v}</option>`).join('');
+  filterExam.innerHTML = `<option value="">📝 Entrance Exam</option>` + [...new Set(items.flatMap(x=>(x.exams||[])))].sort((a,b)=>a.localeCompare(b)).map(v=>`<option>${v}</option>`).join('');
+  filterMode.value = filterTier.value = filterExam.value = filterLocation.value = '';
+  searchBox.value='';
+  renderResults();
+}
+
+
+function resetExplore(){ explore.style.display='none'; currentTrend=null; }
+
+
+function matchesFilters(x){
+  const L = filterLocation.value; const E = filterExam.value; const T = filterTier.value; const M = filterMode.value; const Q = (searchBox.value||'').toLowerCase();
+  const loc = getLoc(x);
+  const exams = x.exams || [];
+  const text = `${x.course||''} ${x.inst||''}`.toLowerCase();
+  return (!L || loc===L || loc.endsWith(L))
+      && (!E || exams.includes(E))
+      && (!T || x.tier===T)
+      && (!M || x.mode===M)
+      && (!Q || text.includes(Q));
+}
+
+
+
+function renderResults(){
+  if(!currentTrend) return;
+  const items = catalog.filter(x=>x.trend===currentTrend.id && matchesFilters(x));
+  results.innerHTML = items.map((x,i)=>{
+    const loc = getLoc(x);
+    const safe = JSON.stringify(x).replace(/"/g,'&quot;');
+    return `<div class="item">
+      <div class="meta"><span class="badge">${x.tier||''}</span><span class="badge">${loc||''}</span><span class="badge">${x.mode||''}</span></div>
+      <h3>${x.course||''}</h3>
+      <div class="small">${x.inst||''}</div>
+      <div class="chips">${(x.exams||[]).map(t=>`<span class="chip">${t}</span>`).join('')}</div>
+      <div class="toolbar">
+        <a class="link" href="${x.link||'#'}" target="_blank" rel="noopener">Official page ↗</a>
+        <button onclick='openModal(JSON.parse("` + safe + `"))'>View details</button>
+      </div>
+    </div>`
+  }).join('') || `<div class="small">No results match your filters. Try clearing a filter.</div>`;
+}
+
+
+filterLocation.onchange = filterExam.onchange = filterTier.onchange = filterMode.onchange = renderResults;
+searchBox.oninput = ()=>{ renderResults(); };
+
+
+function openModal(x){
+  document.getElementById('modalTitle').textContent = `${x.inst||''} — ${x.course||''}`;
+  document.getElementById('mStructure').textContent = `${getStructureText(x)}${x.duration?` (${x.duration})`:''}`;
+  document.getElementById('mExams').innerHTML = (x.exams||[]).map(t=>`<span class="chip">${t}</span>`).join('');
+  document.getElementById('mFees').textContent = x.fees || 'See official fee page';
+  document.getElementById('mRecruiters').innerHTML = (getRecruiters(x)||[]).map(r=>`<li>${r}</li>`).join('') || '<li>See recent placement report.</li>';
+  document.getElementById('mCareers').innerHTML = (x.careers||[]).map(c=>`<li>${c}</li>`).join('');
+  document.getElementById('mHigher').innerHTML = (x.higher||[]).map(h=>`<li>${h}</li>`).join('');
+  document.getElementById('mLink').href = x.link || '#';
+  document.getElementById('mMeta').textContent = `${getLoc(x)} • ${x.tier||''} • ${x.mode||''}`;
+  modal.classList.add('show');
+}
+
+function closeModal(){ modal.classList.remove('show'); }
+modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+
+renderTrends();
+</script>
+</body>
+</html>
